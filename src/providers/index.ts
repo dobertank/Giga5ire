@@ -12,6 +12,7 @@ import Doubao from './Doubao';
 import Grok from './Grok';
 import DeepSeek from './DeepSeek';
 import Mistral from './Mistral';
+import GigaChat from './GigaChat';
 
 export const providers: { [key: string]: IServiceProvider } = {
   OpenAI,
@@ -26,6 +27,7 @@ export const providers: { [key: string]: IServiceProvider } = {
   Doubao,
   DeepSeek,
   LMStudio,
+  GigaChat,
   '5ire': Fire,
 };
 
