@@ -24,7 +24,9 @@ export default function ProviderForm() {
   const [nameError, setNameError] = useState<string>('');
   const [currency, setCurrency] = useState<string>('USD');
   const [endpoint, setEndpoint] = useState<string>('');
+  const [authEndpoint, setAuthEndpoint] = useState<string>('');
   const [endpointError, setEndpointError] = useState<string>('');
+  const [authEndpointError, setAuthEndpointError] = useState<string>('');
   const [apiKey, setApiKey] = useState<string>('');
   const [apiKeyError, setApiKeyError] = useState<string>('');
   const [secret, setSecret] = useState<string>('');
@@ -41,6 +43,7 @@ export default function ProviderForm() {
     setOldName(provider.name || '');
     setName(provider.name || '');
     setEndpoint(provider.apiBase || '');
+    setAuthEndpoint((provider as any).authBase || '');
     setApiKey(provider.apiKey || '');
     setCurrency(provider.currency || 'USD');
     setSecret(provider.apiSecret || '');
@@ -52,10 +55,12 @@ export default function ProviderForm() {
     return () => {
       setName('');
       setEndpoint('');
+      setAuthEndpoint('');
       setSecret('');
       setVersion('');
       setNameError('');
       setEndpointError('');
+      setAuthEndpointError('');
       setSecretError('');
       setVersionError('');
       setClientId(''); // Clear clientId
@@ -130,12 +135,13 @@ export default function ProviderForm() {
             onChange={(ev) => {
               setCurrency(ev.target.value);
               updateProvider(name, {
-                currency: ev.target.value as 'USD' | 'CNY',
+                currency: ev.target.value as 'USD' | 'CNY' | 'RUB',
               });
             }}
           >
             <option>USD</option>
             <option>CNY</option>
+            <option>RUB</option>
           </Select>
         </Field>
         <Field size="small" className="-mb-2 ml-1">
@@ -190,6 +196,44 @@ export default function ProviderForm() {
           />
         </Field>
       </div>
+      {/* Дополнительный эндпоинт для аутентификации GigaChat */}
+      {provider.name === 'GigaChat' && (
+        <div className="mt-2 flex justify-start items-baseline gap-1">
+          <Label className="w-[70px]" size="small">
+            Auth URL
+          </Label>
+          <Field
+            size="small"
+            className="field-small flex-grow"
+            validationState={authEndpointError ? 'error' : 'none'}
+            validationMessage={authEndpointError}
+          >
+            <Input
+              size="small"
+              value={authEndpoint}
+              className="flex-grow"
+              placeholder={(provider as any).authBase || 'https://ngw.devices.sberbank.ru:9443/oauth'}
+              onBlur={(ev: React.FocusEvent<HTMLInputElement>) => {
+                if (isValidHttpHRL(ev.target.value)) {
+                  updateProvider(name, {
+                    authBase: ev.target.value,
+                  } as any);
+                } else {
+                  setAuthEndpointError(t('Provider.Tooltip.InvalidAPIEndpoint'));
+                }
+              }}
+              onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {
+                setAuthEndpoint(ev.target.value);
+                if (isValidHttpHRL(ev.target.value)) {
+                  setAuthEndpointError('');
+                } else {
+                  setAuthEndpointError(t('Provider.Tooltip.InvalidAPIEndpoint'));
+                }
+              }}
+            />
+          </Field>
+        </div>
+      )}
       {getChatAPISchema(provider.name || '').includes('key') && (
         <div className="mt-2 flex justify-start items-baseline gap-1">
           <Label className="w-[70px]" size="small">
@@ -301,7 +345,7 @@ export default function ProviderForm() {
       {getChatAPISchema(provider.name || '').includes('clientId') && (
         <div className="mt-2 flex justify-start items-baseline gap-1">
           <Label className="w-[70px]" size="small">
-            {t('Provider.ClientId')} {/* Use translation for label */}
+            {t('Common.ClientId')} {/* Use translation for label */}
           </Label>
           <Field
             size="small"
@@ -329,7 +373,7 @@ export default function ProviderForm() {
       {getChatAPISchema(provider.name || '').includes('clientSecret') && (
         <div className="mt-2 flex justify-start items-baseline gap-1">
           <Label className="w-[70px]" size="small">
-            {t('Provider.ClientSecret')} {/* Use translation for label */}
+            {t('Common.ClientSecret')} {/* Use translation for label */}
           </Label>
           <Field
             size="small"
@@ -355,7 +399,7 @@ export default function ProviderForm() {
       {getChatAPISchema(provider.name || '').includes('rqUID') && (
         <div className="mt-2 flex justify-start items-baseline gap-1">
           <Label className="w-[70px]" size="small">
-            {t('Provider.RqUID')} {/* Use translation for label */}
+            {t('Common.RqUID')} {/* Use translation for label */}
           </Label>
           <Field size="small" className="field-small flex-grow">
             <Input

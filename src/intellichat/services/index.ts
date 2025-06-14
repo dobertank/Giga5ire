@@ -13,6 +13,7 @@ import FireChatService from './FireChatService';
 import DoubaoChatService from './DoubaoChatService';
 import GrokChatService from './GrokChatService';
 import DeepSeekChatService from './DeepSeekChatService';
+import GigaChatService from './GigaChatService';
 import INextChatService from './INextCharService';
 
 const debug = Debug('5ire:intellichat:ChatService');
@@ -45,6 +46,8 @@ export default function createService(chatCtx: IChatContext): INextChatService {
       return new GrokChatService(provider.name, chatCtx);
     case 'DeepSeek':
       return new DeepSeekChatService(provider.name, chatCtx);
+    case 'GigaChat':
+      return new GigaChatService(chatCtx);
     case 'LMStudio':
       return new LMStudioChatService(provider.name, chatCtx);
     default:

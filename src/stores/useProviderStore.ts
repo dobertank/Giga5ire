@@ -200,8 +200,12 @@ const mergeProviders = (
         customProvider?.description || builtInProvider?.description || '',
       schema: builtInProvider?.chat?.apiSchema || ['base'],
       apiBase: customProvider?.apiBase || builtInProvider?.apiBase,
+      authBase: customProvider?.authBase || builtInProvider?.authBase,
       apiKey: customProvider?.apiKey || '',
       apiVersion: customProvider?.apiVersion || builtInProvider?.apiVersion,
+      clientId: (customProvider as any)?.clientId || '',
+      clientSecret: (customProvider as any)?.clientSecret || '',
+      rqUID: (customProvider as any)?.rqUID || '',
       temperature: (builtInProvider || defaultProvider).chat.temperature,
       topP: (builtInProvider || defaultProvider).chat.topP,
       presencePenalty: (builtInProvider || defaultProvider).chat

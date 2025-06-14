@@ -12,7 +12,8 @@ export type ProviderType =
   | 'ChatBro'
   | '5ire'
   | 'Doubao'
-  | 'Grok';
+  | 'Grok'
+  | 'GigaChat';
 
 export interface INumberRange {
   min: number;
@@ -105,9 +106,12 @@ export interface IServiceProvider {
   isPremium?: boolean;
   isBuiltIn?: boolean;
   apiBase: string;
+  authBase?: string;
+  // OAuth scope для токена доступа GigaChat
+  scope?: 'GIGACHAT_API_PERS' | 'GIGACHAT_API_B2B' | 'GIGACHAT_API_CORP';
   apiKey?: string;
   apiVersion?: string;
-  currency: 'USD' | 'CNY';
+  currency: 'USD' | 'CNY' | 'RUB';
   options: {
     apiBaseCustomizable?: boolean;
     apiKeyCustomizable?: boolean;
@@ -160,7 +164,10 @@ export interface IChatProviderConfig {
   apiKey: string;
   apiSecret?: string;
   apiVersion?: string;
-  currency: 'USD' | 'CNY';
+  clientId?: string;
+  clientSecret?: string;
+  rqUID?: string;
+  currency: 'USD' | 'CNY' | 'RUB';
   modelExtras?: string[];
   modelsEndpoint?: string;
   models: IChatModelConfig[];

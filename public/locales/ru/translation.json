@@ -1,0 +1,8 @@
+{
+  "Common.ClientId": "ID Клиента",
+  "Common.ClientSecret": "Секрет Клиента",
+  "Common.RqUID": "RqUID",
+  "Provider.Tooltip.InvalidAPIEndpoint": "Неверный эндпоинт API",
+  "Common.Required": "Обязательно",
+  "Common.APIEndpoint": "Эндпоинт API"
+} 
