@@ -31,6 +31,9 @@ export default function ProviderForm() {
   const [secretError, setSecretError] = useState<string>('');
   const [version, setVersion] = useState<string>('');
   const [versionError, setVersionError] = useState<string>('');
+  const [clientId, setClientId] = useState<string>(''); // Add state for clientId
+  const [clientSecret, setClientSecret] = useState<string>(''); // Add state for clientSecret
+  const [rqUID, setRqUID] = useState<string>(''); // Add state for rqUID
   const [isDefault, setIsDefault] = useState<boolean>(false);
   const { updateProvider, isProviderDuplicated } = useProviderStore();
 
@@ -42,6 +45,9 @@ export default function ProviderForm() {
     setCurrency(provider.currency || 'USD');
     setSecret(provider.apiSecret || '');
     setVersion(provider.apiVersion || '');
+    setClientId(provider.clientId || ''); // Initialize clientId
+    setClientSecret(provider.clientSecret || ''); // Initialize clientSecret
+    setRqUID(provider.rqUID || ''); // Initialize rqUID
     setIsDefault(provider.isDefault || false);
     return () => {
       setName('');
@@ -52,6 +58,9 @@ export default function ProviderForm() {
       setEndpointError('');
       setSecretError('');
       setVersionError('');
+      setClientId(''); // Clear clientId
+      setClientSecret(''); // Clear clientSecret
+      setRqUID(''); // Clear rqUID
       setIsDefault(false);
       setCurrency('USD');
     };
@@ -282,6 +291,82 @@ export default function ProviderForm() {
                 } else {
                   setVersionError('');
                 }
+              }}
+            />
+          </Field>
+        </div>
+      )}
+
+      {/* New fields for GigaChat */}
+      {getChatAPISchema(provider.name || '').includes('clientId') && (
+        <div className="mt-2 flex justify-start items-baseline gap-1">
+          <Label className="w-[70px]" size="small">
+            {t('Provider.ClientId')} {/* Use translation for label */}
+          </Label>
+          <Field
+            size="small"
+            className="field-small flex-grow"
+            // Add validation state and message if needed
+          >
+            <Input
+              size="small"
+              value={clientId}
+              className="flex-grow"
+              onBlur={(ev: React.FocusEvent<HTMLInputElement>) => {
+                // Add validation and update logic
+                updateProvider(name, {
+                  clientId: ev.target.value,
+                });
+              }}
+              onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {
+                setClientId(ev.target.value);
+                // Add validation logic if needed
+              }}
+            />
+          </Field>
+        </div>
+      )}
+      {getChatAPISchema(provider.name || '').includes('clientSecret') && (
+        <div className="mt-2 flex justify-start items-baseline gap-1">
+          <Label className="w-[70px]" size="small">
+            {t('Provider.ClientSecret')} {/* Use translation for label */}
+          </Label>
+          <Field
+            size="small"
+            className="field-small flex-grow"
+            // Add validation state and message if needed
+          >
+            <MaskableInput
+              value={clientSecret}
+              onBlur={(ev: React.FocusEvent<HTMLInputElement>) => {
+                // Add validation and update logic
+                updateProvider(name, {
+                  clientSecret: ev.target.value,
+                });
+              }}
+              onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {
+                setClientSecret(ev.target.value);
+                // Add validation logic if needed
+              }}
+            />
+          </Field>
+        </div>
+      )}
+      {getChatAPISchema(provider.name || '').includes('rqUID') && (
+        <div className="mt-2 flex justify-start items-baseline gap-1">
+          <Label className="w-[70px]" size="small">
+            {t('Provider.RqUID')} {/* Use translation for label */}
+          </Label>
+          <Field size="small" className="field-small flex-grow">
+            <Input
+              size="small"
+              value={rqUID}
+              className="flex-grow"
+              onBlur={(ev: React.FocusEvent<HTMLInputElement>) => {
+                updateProvider(name, { rqUID: ev.target.value });
+              }}
+              onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {
+                setRqUID(ev.target.value);
               }}
             />
           </Field>
