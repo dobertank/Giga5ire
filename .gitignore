@@ -30,3 +30,4 @@ npm-debug.log.*
 /dump.rdb
 /.vscode
 .env
+.cursor/
